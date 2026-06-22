@@ -1,68 +1,80 @@
-# VisitorHub – Smart Visitor Pass & Access Management System
+# 🚀 VisitorHub – Smart Visitor Pass & Access Management System
 
-VisitorHub is a full-stack MERN application designed to streamline visitor management for organizations. It enables visitor registration, appointment scheduling, approval workflows, QR-based pass generation, secure check-in/check-out, PDF badge generation, email notifications, and analytics dashboards.
+VisitorHub is a full-stack Visitor Pass Management System built using the MERN stack. It streamlines visitor registration, appointment scheduling, approval workflows, QR-based visitor passes, check-in/check-out tracking, and administrative analytics through a modern web interface.
 
-## Features
+## 🌐 Live Demo
 
-### Authentication & Authorization
+**Frontend:** https://visitor-hub-iota.vercel.app
 
-* JWT Authentication (Access + Refresh Tokens)
-* Secure password hashing using bcrypt
-* Role-Based Access Control (RBAC)
-* Roles: Admin, Employee, Security
-
-### Visitor Management
-
-* Add, view, and manage visitors
-* Upload visitor photos and ID proofs
-* Detailed visitor profiles
-* Visitor history tracking
-
-### Appointment Management
-
-* Create visitor appointments
-* Appointment approval and rejection workflow
-* Prevent duplicate pass generation
-* Past-date appointment validation
-
-### Smart Pass Generation
-
-* Automatic QR code generation
-* Unique visitor pass numbers
-* PDF visitor badge generation
-* Downloadable visitor passes
-* Pass status tracking (Active, Used, Expired)
-
-### Security Check-In System
-
-* Camera-based QR code scanner
-* Visitor check-in/check-out workflow
-* Real-time pass verification
-* Security audit logs
-
-### Dashboard & Analytics
-
-* Total visitors
-* Active passes
-* Today's visits
-* Check-in/check-out statistics
-* Activity monitoring dashboard
-
-### Notifications
-
-* Appointment approval emails
-* Appointment rejection emails
-* Pass issuance emails with downloadable PDF
+**Backend API:** https://visitorhub-backend.onrender.com
 
 ---
 
-## Tech Stack
+## 📌 Features
+
+### 🔐 Authentication & Authorization
+
+* JWT Authentication (Access + Refresh Tokens)
+* Password Hashing using bcrypt
+* Role-Based Access Control (Admin, Employee, Security)
+* Protected Routes and Middleware
+
+### 👥 Visitor Management
+
+* Add, View, Update and Delete Visitors
+* Store Visitor Information
+* Visitor Details Page
+* Search and Management Interface
+
+### 📅 Appointment Management
+
+* Create Visitor Appointments
+* Appointment Approval & Rejection Workflow
+* Host Assignment
+* Visit Date Validation
+* Status Tracking (Pending, Approved, Rejected)
+
+### 🎫 Smart Visitor Passes
+
+* Automatic Pass Generation after Approval
+* Unique Pass Numbers
+* QR Code Generation
+* Downloadable PDF Visitor Pass
+* Pass Expiry Management
+
+### 📲 QR-Based Check-In / Check-Out
+
+* Camera-Based QR Scanner
+* Verify Visitor Passes
+* Check-In Tracking
+* Check-Out Tracking
+* Security Portal Integration
+
+### 📊 Analytics Dashboard
+
+* Total Visitors
+* Today's Visitors
+* Active Passes
+* Daily Check-Ins
+* Real-Time Statistics
+
+### 📧 Notification System
+
+* Appointment Approval Emails
+* Appointment Rejection Emails
+* Visitor Pass Issued Notifications
+* Nodemailer Integration
+
+---
+
+## 🛠 Tech Stack
 
 ### Frontend
 
 * React.js
-* React Router
+* Vite
 * Tailwind CSS
+* React Router DOM
 * Axios
 * React Hook Form
 
@@ -70,24 +82,26 @@ VisitorHub is a full-stack MERN application designed to streamline visitor manag
 
 * Node.js
 * Express.js
-* MongoDB
+* MongoDB Atlas
 * Mongoose
 * JWT Authentication
+* Multer
 
-### Additional Libraries
+### Additional Services
 
-* QRCode
+* QR Code Generation
 * PDFKit
 * Nodemailer
-* Multer
-* Bcrypt
+* Render Deployment
+* Vercel Deployment
 
 ---
 
-## Project Structure
+## 📂 Project Structure
 
-```text
+```bash
 VisitorHub/
+│
 ├── backend/
 │   ├── config/
 │   ├── controllers/
@@ -95,41 +109,43 @@ VisitorHub/
 │   ├── models/
 │   ├── routes/
 │   ├── services/
+│   ├── utils/
 │   ├── seed/
-│   ├── uploads/
 │   └── server.js
 │
-└── frontend/
-    ├── src/
-    │   ├── components/
-    │   ├── context/
-    │   ├── pages/
-    │   ├── services/
-    │   └── App.jsx
-    └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── App.jsx
+│   │
+│   └── vite.config.js
+│
+└── README.md
 ```
 
 ---
 
-## Installation
+## ⚙️ Local Setup
 
-### Clone Repository
+### 1️⃣ Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/VisitorHub.git
+git clone https://github.com/AnshikaJain-code/VisitorHub.git
 cd VisitorHub
 ```
 
-### Backend Setup
+### 2️⃣ Backend Setup
 
 ```bash
 cd backend
 npm install
-npm run seed
 npm run dev
 ```
 
-### Frontend Setup
+### 3️⃣ Frontend Setup
 
 ```bash
 cd frontend
@@ -139,72 +155,103 @@ npm run dev
 
 ---
 
-## Environment Variables
+## 🔑 Environment Variables
 
-### Backend (.env)
+Create a `.env` file inside the backend folder:
 
 ```env
 PORT=5000
-MONGO_URI=
-JWT_SECRET=
-JWT_REFRESH_SECRET=
-CLIENT_URL=
-EMAIL_USER=
-EMAIL_PASS=
-BASE_URL=
+
+MONGO_URI=your_mongodb_connection_string
+
+JWT_SECRET=your_secret
+JWT_EXPIRE=1d
+
+JWT_REFRESH_SECRET=your_refresh_secret
+JWT_REFRESH_EXPIRE=7d
+
+CLIENT_URL=http://localhost:5173
+
+BASE_URL=http://localhost:5000
 ```
 
-### Frontend (.env)
+Optional (for Email Notifications):
 
 ```env
-VITE_API_URL=http://localhost:5000/api
+SMTP_HOST=
+SMTP_PORT=
+SMTP_USER=
+SMTP_PASS=
+EMAIL_FROM=
 ```
 
 ---
 
-## Demo Accounts
+## 👤 Demo Roles
 
-| Role     | Email                                         |
-| -------- | --------------------------------------------- |
-| Admin    | [admin@vpms.com](mailto:admin@vpms.com)       |
-| Security | [security@vpms.com](mailto:security@vpms.com) |
-| Employee | [employee@vpms.com](mailto:employee@vpms.com) |
-
-Passwords can be configured through the seed script.
+| Role     | Access                                 |
+| -------- | -------------------------------------- |
+| Admin    | Manage Visitors, Appointments, Passes  |
+| Employee | Create & Approve Appointments          |
+| Security | Verify QR Passes, Check-In / Check-Out |
 
 ---
 
-## Application Workflow
+## 🔄 Application Workflow
 
-1. Employee registers a visitor.
+1. Visitor is added to the system.
 2. Employee creates an appointment.
-3. Admin approves or rejects the appointment.
-4. On approval:
-
-   * QR Pass is generated
-   * PDF Badge is generated
-   * Email notification is sent
-5. Security scans QR code at entry.
-6. Visitor checks in and checks out.
-7. Activity is recorded in logs and dashboard analytics.
+3. Appointment is approved.
+4. QR Pass and PDF Badge are automatically generated.
+5. Visitor arrives and presents QR Pass.
+6. Security scans QR Code.
+7. Visitor Check-In / Check-Out is recorded.
+8. Dashboard analytics update automatically.
 
 ---
 
-## Future Enhancements
+## 📈 Future Enhancements
 
 * OTP Verification
 * Multi-Organization Support
-* Advanced Reporting & CSV Export
-* Audit Logging
-* Docker Deployment
-* Pass Revocation Workflow
-* Mobile Responsive Security Scanner
+* Audit Logs
+* Advanced Reporting
+* CSV / Excel Export
+* Email Templates
+* Docker Support
+* Dark Mode
+* Mobile App Version
 
 ---
 
-## Author
+## 🎯 Key Learnings
+
+This project demonstrates:
+
+* Full-Stack MERN Development
+* Authentication & Authorization
+* REST API Design
+* MongoDB Data Modeling
+* QR-Based Access Systems
+* PDF Generation
+* File Upload Handling
+* Deployment on Render & Vercel
+* Production Environment Configuration
+* CORS & API Integration
+
+---
+
+## 👩‍💻 Author
 
 **Anshika Jain**
 
-Built as a full-stack MERN project showcasing authentication, role-based access control, QR workflows, PDF generation, email automation, and secure visitor management.
+B.Tech (ECE - AI & ML)
+Netaji Subhas University of Technology (NSUT)
+
+GitHub: https://github.com/AnshikaJain-code
+
+---
+
+⭐ If you found this project useful, consider giving it a star on GitHub!
+
 
