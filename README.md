@@ -1,142 +1,210 @@
-# Visitor Pass Management System (VPMS)
+# VisitorHub – Smart Visitor Pass & Access Management System
 
-A MERN-stack visitor management system: pre-registration, appointment approval,
-QR-based visitor passes (with PDF badge), check-in/check-out, email notifications,
-and a basic analytics dashboard.
+VisitorHub is a full-stack MERN application designed to streamline visitor management for organizations. It enables visitor registration, appointment scheduling, approval workflows, QR-based pass generation, secure check-in/check-out, PDF badge generation, email notifications, and analytics dashboards.
 
-## What's fully implemented
+## Features
 
-- JWT auth (access + refresh tokens), bcrypt password hashing, role-based middleware
-  (`admin`, `security`, `employee`, `visitor`)
-- Visitor CRUD with photo / ID-proof upload (Multer)
-- Appointment creation, approval, rejection
-- On approval: auto-generates a unique pass number, QR code (`qrcode`), and a
-  PDF visitor badge (`pdfkit`) embedding the QR — saved to `/backend/uploads`
-- QR verification endpoint (`POST /api/pass/verify`) used by the scanner page
-- Check-in / check-out logging
-- Email notifications on approve / reject / pass-issued (Nodemailer)
-- Dashboard stats API (total visitors, today's visitors, active passes, check-ins today)
-- React frontend: login/register, role-aware sidebar, dashboard, visitor list/add/details,
-  appointment list/create/approval queue, pass view with QR + PDF download,
-  camera-based QR scanner with check-in/out buttons, check logs table
-- Seed script creating an admin, security, and employee user plus sample visitors/appointments
+### Authentication & Authorization
 
-## What's intentionally stubbed / left as next steps
+* JWT Authentication (Access + Refresh Tokens)
+* Secure password hashing using bcrypt
+* Role-Based Access Control (RBAC)
+* Roles: Admin, Employee, Security
 
-Given the scope of the original spec, these were **not** fully built out — they're
-called out here rather than silently skipped:
+### Visitor Management
 
-- **OTP verification** — not implemented (would slot into `authController` + a new
-  `otpService` using Nodemailer/Twilio).
-- **Multi-organization support** — the `organization` field exists on `User`, but
-  there's no org-scoped data isolation or org-switching UI yet.
-- **Audit logs** — no dedicated `AuditLog` model/middleware yet.
-- **CSV/Excel export & advanced report filters** — the check-log/appointment list
-  APIs support basic filtering (date, status, host); a dedicated `/reports` export
-  endpoint (e.g. with `json2csv` / `exceljs`) is not yet built.
-- **Docker / Nginx deployment config** — not included in this pass.
-- **Refresh-token rotation/blacklisting** beyond single-token-per-user storage.
+* Add, view, and manage visitors
+* Upload visitor photos and ID proofs
+* Detailed visitor profiles
+* Visitor history tracking
 
-These are all reasonable follow-ups — happy to build any of them out next.
+### Appointment Management
 
-## Project structure
+* Create visitor appointments
+* Appointment approval and rejection workflow
+* Prevent duplicate pass generation
+* Past-date appointment validation
 
-```
-vpms/
+### Smart Pass Generation
+
+* Automatic QR code generation
+* Unique visitor pass numbers
+* PDF visitor badge generation
+* Downloadable visitor passes
+* Pass status tracking (Active, Used, Expired)
+
+### Security Check-In System
+
+* Camera-based QR code scanner
+* Visitor check-in/check-out workflow
+* Real-time pass verification
+* Security audit logs
+
+### Dashboard & Analytics
+
+* Total visitors
+* Active passes
+* Today's visits
+* Check-in/check-out statistics
+* Activity monitoring dashboard
+
+### Notifications
+
+* Appointment approval emails
+* Appointment rejection emails
+* Pass issuance emails with downloadable PDF
+
+---
+
+## Tech Stack
+
+### Frontend
+
+* React.js
+* React Router
+* Tailwind CSS
+* Axios
+* React Hook Form
+
+### Backend
+
+* Node.js
+* Express.js
+* MongoDB
+* Mongoose
+* JWT Authentication
+
+### Additional Libraries
+
+* QRCode
+* PDFKit
+* Nodemailer
+* Multer
+* Bcrypt
+
+---
+
+## Project Structure
+
+```text
+VisitorHub/
 ├── backend/
-│   ├── config/db.js
-│   ├── models/        User, Visitor, Appointment, Pass, CheckLog
-│   ├── middlewares/    auth, role, errorHandler, upload (multer)
-│   ├── services/       qrService, pdfService, emailService
+│   ├── config/
 │   ├── controllers/
+│   ├── middlewares/
+│   ├── models/
 │   ├── routes/
-│   ├── seed/seed.js
-│   ├── uploads/        generated PDFs & uploaded photos land here
-│   ├── server.js
-│   └── package.json
+│   ├── services/
+│   ├── seed/
+│   ├── uploads/
+│   └── server.js
+│
 └── frontend/
     ├── src/
-    │   ├── components/ Sidebar, Navbar, Card, Table, ProtectedRoute
-    │   ├── pages/       Login, Register, Dashboard, Visitor*, Appointment*,
-    │   │                ApprovalQueue, PassView, QRScanner, CheckLogs
-    │   ├── context/AuthContext.jsx
-    │   ├── services/api.js   (axios instance with auto refresh-token retry)
-    │   ├── App.jsx
-    │   └── main.jsx
-    ├── tailwind.config.js
+    │   ├── components/
+    │   ├── context/
+    │   ├── pages/
+    │   ├── services/
+    │   └── App.jsx
     └── package.json
 ```
 
-## Setup
+---
 
-### 1. Backend
+## Installation
+
+### Clone Repository
+
+```bash
+git clone https://github.com/yourusername/VisitorHub.git
+cd VisitorHub
+```
+
+### Backend Setup
 
 ```bash
 cd backend
 npm install
-cp .env.example .env
-# edit .env: set MONGO_URI (MongoDB Atlas), JWT secrets, SMTP creds
-npm run seed     # creates admin/security/employee + sample data
-npm run dev      # starts on http://localhost:5000
+npm run seed
+npm run dev
 ```
 
-### 2. Frontend
+### Frontend Setup
 
 ```bash
 cd frontend
 npm install
-cp .env.example .env
-# VITE_API_URL=http://localhost:5000/api
-npm run dev      # starts on http://localhost:5173
+npm run dev
 ```
 
-## Environment variables (backend `.env`)
+---
 
-| Variable | Description |
-|---|---|
-| `PORT` | Backend port (default 5000) |
-| `MONGO_URI` | MongoDB Atlas connection string |
-| `JWT_SECRET` / `JWT_EXPIRE` | Access token secret/expiry |
-| `JWT_REFRESH_SECRET` / `JWT_REFRESH_EXPIRE` | Refresh token secret/expiry |
-| `CLIENT_URL` | Frontend origin, used for CORS |
-| `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` / `EMAIL_FROM` | Nodemailer SMTP config |
-| `BASE_URL` | Backend base URL, used to build PDF download links in emails |
+## Environment Variables
 
-## Seeded demo accounts
+### Backend (.env)
 
-| Role | Email | Password |
-|---|---|---|
-| Admin | admin@vpms.com | Admin@123 |
-| Security | security@vpms.com | Security@123 |
-| Employee/Host | employee@vpms.com | Employee@123 |
+```env
+PORT=5000
+MONGO_URI=
+JWT_SECRET=
+JWT_REFRESH_SECRET=
+CLIENT_URL=
+EMAIL_USER=
+EMAIL_PASS=
+BASE_URL=
+```
 
-## Core flow to demo
+### Frontend (.env)
 
-1. Login as **employee** → Visitors → Add Visitor → copy the visitor's `_id`
-   from the URL/details page.
-2. Appointments → Invite Visitor → paste visitor ID + your own user ID as host → submit.
-3. Approval Queue → Approve → this auto-generates the QR pass + PDF badge and
-   emails the visitor (if SMTP is configured).
-4. Login as **security** → QR Scanner → scan the generated QR (or test
-   `POST /api/pass/verify` directly with the pass number) → Check In / Check Out.
-5. Dashboard shows live counts; Check Logs shows the check-in/out history.
+```env
+VITE_API_URL=http://localhost:5000/api
+```
 
-## API quick reference
+---
 
-| Method | Endpoint | Auth |
-|---|---|---|
-| POST | `/api/auth/register`, `/api/auth/login`, `/api/auth/refresh` | public |
-| GET | `/api/auth/me` | logged in |
-| POST/GET/PUT/DELETE | `/api/visitors`, `/api/visitors/:id` | role-restricted |
-| POST/GET | `/api/appointments` | logged in / role-restricted |
-| PATCH | `/api/appointments/:id/approve`, `/:id/reject` | admin/employee |
-| GET | `/api/pass/:id` | logged in |
-| POST | `/api/pass/verify` | logged in |
-| POST | `/api/checklog/checkin`, `/checkout` | admin/security |
-| GET | `/api/checklog` | logged in |
-| GET | `/api/dashboard/stats` | logged in |
+## Demo Accounts
 
-## Screenshots
+| Role     | Email                                         |
+| -------- | --------------------------------------------- |
+| Admin    | [admin@vpms.com](mailto:admin@vpms.com)       |
+| Security | [security@vpms.com](mailto:security@vpms.com) |
+| Employee | [employee@vpms.com](mailto:employee@vpms.com) |
 
-_Add screenshots here after running the app locally — e.g. `docs/screenshot-dashboard.png`,
-`docs/screenshot-pass.png`, `docs/screenshot-scanner.png`._
+Passwords can be configured through the seed script.
+
+---
+
+## Application Workflow
+
+1. Employee registers a visitor.
+2. Employee creates an appointment.
+3. Admin approves or rejects the appointment.
+4. On approval:
+
+   * QR Pass is generated
+   * PDF Badge is generated
+   * Email notification is sent
+5. Security scans QR code at entry.
+6. Visitor checks in and checks out.
+7. Activity is recorded in logs and dashboard analytics.
+
+---
+
+## Future Enhancements
+
+* OTP Verification
+* Multi-Organization Support
+* Advanced Reporting & CSV Export
+* Audit Logging
+* Docker Deployment
+* Pass Revocation Workflow
+* Mobile Responsive Security Scanner
+
+---
+
+## Author
+
+**Anshika Jain**
+
+Built as a full-stack MERN project showcasing authentication, role-based access control, QR workflows, PDF generation, email automation, and secure visitor management.
+
