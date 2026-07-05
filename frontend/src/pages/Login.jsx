@@ -15,8 +15,14 @@ const Login = () => {
       await login(formData.email, formData.password);
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
-    }
+  console.log("========== LOGIN ERROR ==========");
+  console.log(err);
+  console.log("Status:", err.response?.status);
+  console.log("Data:", err.response?.data);
+  console.log("Message:", err.message);
+
+  setError(err.response?.data?.message || "Login failed");
+}
   };
 
   return (

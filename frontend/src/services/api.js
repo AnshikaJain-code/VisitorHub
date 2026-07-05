@@ -41,7 +41,8 @@ api.interceptors.response.use(
     const originalRequest = error.config;
 
     // Check if the error is a 401 AND we haven't already retried this specific request
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && !originalRequest._retry && !originalRequest.url.includes("/auth/login") 
+      && !originalRequest.url.includes("/auth/register") && !originalRequest.url.includes("/auth/refresh")) {
       
       // If a refresh is already in progress, queue this request
       if (isRefreshing) {
