@@ -4,9 +4,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Register = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const { register: registerUser } = useAuth();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
   const onSubmit = async (formData) => {
@@ -39,12 +40,33 @@ const Register = () => {
             {...register('email', { required: true })}
             className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
           />
-          <input
-            type="password"
-            placeholder="Password"
-            {...register('password', { required: true, minLength: 6 })}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Password
+            </label>
+
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                {...register('password', { required: true })}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 pr-10 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                {showPassword ? '🙈' : '👁️'}
+              </button>
+            </div>
+
+            {errors.password && (
+              <p className="text-xs text-red-500 mt-1">
+                Password is required
+              </p>
+            )}
+          </div>
           <select {...register('role')} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
             <option value="employee">Employee / Host</option>
             <option value="security">Security / Frontdesk</option>
