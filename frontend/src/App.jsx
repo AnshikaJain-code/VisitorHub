@@ -15,6 +15,7 @@ import CheckLogs from './pages/CheckLogs';
 import ProtectedRoute from './components/ProtectedRoute';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
+import UserManagement from './pages/UserManagement';
 
 const Layout = ({ children }) => (
   <div className="flex">
@@ -30,7 +31,7 @@ function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      
 
       <Route
         path="/dashboard"
@@ -135,6 +136,16 @@ function App() {
 
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route
+        path="/users"
+        element={
+          <ProtectedRoute roles={['admin']}>
+            <Layout>
+              <UserManagement />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }

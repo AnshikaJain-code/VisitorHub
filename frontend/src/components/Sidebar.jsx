@@ -8,6 +8,7 @@ const linksByRole = {
     { to: '/visitors', label: 'Visitors' },
     { to: '/appointments', label: 'Appointments' },
     { to: '/logs', label: 'Check Logs' },
+    { to: '/users', label: 'User Management' },
   ],
   security: [
     { to: '/dashboard', label: 'Dashboard' },

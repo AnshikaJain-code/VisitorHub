@@ -1,9 +1,19 @@
 const express = require('express');
+
 const router = express.Router();
 
-const { getUsers } = require('../controllers/userController');
-const { protect } = require('../middlewares/auth');
+const {
+  getUsers,
+  createUser
+} = require('../controllers/userController');
 
-router.get('/', protect, getUsers);
+const {
+  protect,
+  adminOnly
+} = require('../middlewares/auth');
+
+router.get('/', protect, adminOnly, getUsers);
+
+router.post('/', protect, adminOnly, createUser);
 
 module.exports = router;
