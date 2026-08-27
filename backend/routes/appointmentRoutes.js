@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post('/', protect, authorize('admin', 'security', 'employee'), createAppointment);
 router.get('/', protect, getAppointments);
-router.patch('/:id/approve', protect, authorize('admin', 'employee'), approveAppointment);
-router.patch('/:id/reject', protect, authorize('admin', 'employee'), rejectAppointment);
+router.patch('/:id/approve', protect, authorize('admin'), approveAppointment);
+router.patch('/:id/reject', protect, authorize('admin'), rejectAppointment);
 
 module.exports = router;

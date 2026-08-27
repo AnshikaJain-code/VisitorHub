@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "../services/api";
 import Table from "../components/Table";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const statusColors = {
   Pending: "bg-yellow-100 text-yellow-700",
@@ -13,6 +14,8 @@ const statusColors = {
 const AppointmentList = () => {
   const [appointments, setAppointments] = useState([]);
   const navigate = useNavigate();
+
+  const { user } = useAuth();
 
   const loadAppointments = async () => {
     try {
@@ -109,7 +112,9 @@ const AppointmentList = () => {
   label: "Actions",
   render: (row) => (
     <div className="flex gap-2">
-      {row.status === "Pending" && (
+
+      {/* Only Admin can approve/reject */}
+      {user?.role === "admin" && row.status === "Pending" && (
         <>
           <button
             onClick={() => approveAppointment(row._id)}
@@ -135,6 +140,7 @@ const AppointmentList = () => {
           View Pass
         </button>
       )}
+
     </div>
   ),
 },
