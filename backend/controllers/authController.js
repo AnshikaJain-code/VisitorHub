@@ -30,79 +30,31 @@ const register = async (req, res, next) => {
 };
 
 // POST /api/auth/login
-// const login = async (req, res, next) => {
-//   try {
-//     const { email, password } = req.body;
-//     const user = await User.findOne({ email });
-
-//     if (!user || !(await user.matchPassword(password))) {
-//       return res.status(401).json({ message: 'Invalid email or password' });
-//     }
-
-//     const accessToken = generateAccessToken(user._id);
-//     const refreshToken = generateRefreshToken(user._id);
-//     user.refreshToken = refreshToken;
-//     await user.save();
-
-//     res.json({
-//       user: { id: user._id, name: user.name, email: user.email, role: user.role },
-//       accessToken,
-//       refreshToken,
-//     });
-//   } catch (err) {
-//     next(err);
-//   }
-// };
-
-
-
-// GPT
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-
-    console.log("BODY:", req.body);
-    console.log("EMAIL:", email);
-    console.log("PASSWORD:", password);
-
     const user = await User.findOne({ email });
 
-    console.log("USER FOUND:", !!user);
-
-    if (user) {
-      const match = await user.matchPassword(password);
-
-      console.log("PASSWORD MATCH:", match);
-      console.log("HASH:", user.password);
-    }
-
     if (!user || !(await user.matchPassword(password))) {
-      return res.status(401).json({
-        message: "Invalid email or password"
-      });
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
 
     const accessToken = generateAccessToken(user._id);
     const refreshToken = generateRefreshToken(user._id);
-
     user.refreshToken = refreshToken;
     await user.save();
 
     res.json({
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role
-      },
+      user: { id: user._id, name: user.name, email: user.email, role: user.role },
       accessToken,
-      refreshToken
+      refreshToken,
     });
-
   } catch (err) {
     next(err);
   }
 };
+
+
 
 
 
